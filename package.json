@@ -26,6 +26,7 @@
     "class-validator": "^0.10.0",
     "config": "^3.2.2",
     "emoji-strip": "^1.0.1",
+    "moment-timezone": "^0.5.26",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3",

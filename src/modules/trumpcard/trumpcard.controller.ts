@@ -20,7 +20,7 @@ export class TrumpcardController {
   @Post('/newtweet')
   @UsePipes(TrumpCardTokenValidationPipe, ValidationPipe)
   createCard(@Body() createCardDto: CreateCardDto) {
-    this.logger.verbose(`Creating a new card. Data: ${JSON.stringify(createCardDto)}`);
+    this.logger.verbose(`Creating a new card.`);
     return this.trumpcardService.tweetCard(createCardDto);
   }
 }
