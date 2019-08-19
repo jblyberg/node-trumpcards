@@ -21,6 +21,6 @@ export class TrumpcardController {
   @UsePipes(TrumpCardTokenValidationPipe, ValidationPipe)
   createCard(@Body() createCardDto: CreateCardDto) {
     this.logger.verbose(`Creating a new card. Data: ${JSON.stringify(createCardDto)}`);
-    return this.trumpcardService.createCard(createCardDto);
+    return this.trumpcardService.tweetCard(createCardDto);
   }
 }
