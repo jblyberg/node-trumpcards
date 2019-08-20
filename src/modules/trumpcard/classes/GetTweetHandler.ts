@@ -1,10 +1,10 @@
 import * as Twit from 'twit';
 import * as config from 'config';
-import { Logger } from '@nestjs/common';
 import * as emojiStrip from 'emoji-strip';
+import * as moment from 'moment-timezone';
+import { Logger } from '@nestjs/common';
 import { TweetDetails } from '../interfaces/tweet-details.interface';
 import { default as trumpisms } from '../../../data/trumpisms.map';
-import * as moment from 'moment-timezone';
 
 export class GetTweetHandler {
   private twitterConfig = config.get('twitter');
@@ -17,7 +17,7 @@ export class GetTweetHandler {
     return tweetDetails;
   }
 
-  parseTweetDetails({ data }): TweetDetails {
+  private parseTweetDetails({ data }): TweetDetails {
     const tweetDetails = {
       is_retweet: data.retweeted_status ? true : false,
       tweet_timestamp: this.extractTimestamp(data.created_at),
@@ -32,7 +32,7 @@ export class GetTweetHandler {
   private extractText(tweetText: string): string {
     tweetText = emojiStrip(tweetText);
     tweetText = tweetText.replace(/(?:https?|ftp):\/\/[\n\S]+/g, '');
-    tweetText = tweetText.replace(/(\r\n|\n|\r)/gm, ' ');
+    tweetText = tweetText.replace(/(\r\n|\n|\r)+/gm, String.fromCharCode(10));
     tweetText = tweetText.replace(/  /gm, ' ').trim();
 
     return tweetText;
