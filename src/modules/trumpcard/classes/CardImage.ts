@@ -14,7 +14,7 @@ export class CardImage {
     this.assetDir = __dirname + '/../assets';
   }
 
-  async createCardStream(): Promise<PNGStream> {
+  async createCardCanvas() {
     // Assign and register fonts
     await this.registerCardFonts();
 
@@ -35,29 +35,37 @@ export class CardImage {
     ctx.rotate(0.007);
 
     // Add card content
-
     await this.writeDateTime(ctx);
     await this.writeElec(ctx);
-    // await this.writeCardCallnum(ctx);
-    // await this.writeCardText(ctx);
-    // await this.writeTrumpism(ctx);
+    await this.writeCallnum(ctx);
+    await this.writeCardText(ctx);
+    await this.writeTrumpism(ctx);
 
-    // Create the image stream
-    this.pngStream = canvas.createPNGStream({
+    // return the canvas object;
+    return canvas;
+  }
+
+  public async cardBuffer() {
+    const canvas = await this.createCardCanvas();
+    return canvas.toBuffer();
+  }
+
+  public async cardStream() {
+    const canvas = await this.createCardCanvas();
+    const pngStream = canvas.createPNGStream({
       compressionLevel: 6,
       filters: canvas.PNG_ALL_FILTERS,
       palette: undefined,
       backgroundIndex: 0,
       resolution: 96,
     });
-
-    return this.pngStream;
+    return pngStream;
   }
 
   private writeDateTime(ctx) {
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#242424';
     ctx.font = '13px freemonobold';
-    ctx.fillText(this.tweetDetails.tweet_timestamp, 95, 30);
+    ctx.fillText(this.tweetDetails.timestamp, 95, 30);
     return this;
   }
 
@@ -69,6 +77,36 @@ export class CardImage {
     ctx.fillText('ELEC', 10, 20);
     ctx.rotate(randomAngleFloat * -1);
     return this;
+  }
+
+  private writeCallnum(ctx) {
+    ctx.fillStyle = '#CA3433';
+    ctx.font = '11pt freemonobold';
+    ctx.fillText(this.tweetDetails.callnum, 12, 60);
+    return this;
+  }
+
+  private writeCardText(ctx) {
+    let font = '13px freemonobold';
+    let lineLength = 33;
+    if (this.tweetDetails.text.length > 140) {
+      font = '12px freemonobold';
+      lineLength = 34;
+    }
+    ctx.fillStyle = '#242424';
+    ctx.font = font;
+    ctx.fillText(wrap(this.tweetDetails.text, { width: lineLength, indent: '' }), 95, 53);
+    return this;
+  }
+
+  private writeTrumpism(ctx) {
+    const trumpism = wrap(this.tweetDetails.trumpism, { width: 40, indent: '' });
+    const randomAngleFloat = Math.random() * (0.015 + 0.015) - 0.015;
+    ctx.fillStyle = '#27276b';
+    ctx.font = '10px bftinyhand-regular';
+    ctx.rotate(randomAngleFloat);
+    ctx.fillText(trumpism, 25, 172);
+    ctx.rotate(randomAngleFloat * -1);
   }
 
   private async registerCardFonts() {

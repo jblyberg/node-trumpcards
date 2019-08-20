@@ -27,9 +27,10 @@ export class TrumpcardController {
   }
 
   @Post('/card')
+  @UsePipes(TrumpCardTokenValidationPipe, ValidationPipe)
   @Header('Content-Type', 'image/png')
   async streamCard(@Body() createCardDto: CreateCardDto, @Res() response: Response) {
-    const cardStream = await this.trumpcardService.tweetCard(createCardDto);
+    const cardStream = await this.trumpcardService.cardStream(createCardDto);
 
     response.setHeader('Content-Disposition', 'attachment; filename=card.png');
 

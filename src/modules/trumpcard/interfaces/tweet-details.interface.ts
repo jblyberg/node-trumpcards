@@ -1,8 +1,9 @@
 export interface TweetDetails {
   is_retweet: boolean;
-  tweet_timestamp: string;
+  timestamp: string;
   text: string;
-  hashtags: Array<any>;
-  mentions: Array<any>;
+  hashtags: any[];
+  mentions: any[];
   trumpism: string;
+  callnum: string;
 }
