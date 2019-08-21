@@ -84,11 +84,11 @@ export class CardImage {
   }
 
   private writeCardText(ctx) {
-    let font = '13px freemonobold';
-    let lineLength = 33;
+    let font = '12px freemonobold';
+    let lineLength = 34;
     if (this.tweetDetails.text.length > 140) {
-      font = '12px freemonobold';
-      lineLength = 34;
+      font = '11px freemonobold';
+      lineLength = 35;
     }
     ctx.fillStyle = '#242424';
     ctx.font = font;
