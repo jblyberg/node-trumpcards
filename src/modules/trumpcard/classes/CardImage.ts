@@ -1,20 +1,17 @@
 import { TweetDetails } from '../interfaces/tweet-details.interface';
-import { createCanvas, loadImage, registerFont, PNGStream } from 'canvas';
-import { Logger } from '@nestjs/common';
+import { createCanvas, loadImage, registerFont, PNGStream, Canvas } from 'canvas';
 import * as wrap from 'word-wrap';
 
 export class CardImage {
   private tweetDetails: TweetDetails;
   private assetDir: string;
-  private pngStream: PNGStream;
-  private logger = new Logger('CardImage');
 
   constructor(tweetDetails: TweetDetails) {
     this.tweetDetails = tweetDetails;
     this.assetDir = __dirname + '/../assets';
   }
 
-  async createCardCanvas() {
+  async createCardCanvas(): Promise<Canvas> {
     // Assign and register fonts
     await this.registerCardFonts();
 
@@ -45,12 +42,12 @@ export class CardImage {
     return canvas;
   }
 
-  public async cardBuffer() {
+  public async cardBuffer(): Promise<Buffer> {
     const canvas = await this.createCardCanvas();
     return canvas.toBuffer();
   }
 
-  public async cardStream() {
+  public async cardStream(): Promise<PNGStream> {
     const canvas = await this.createCardCanvas();
     const pngStream = canvas.createPNGStream({
       compressionLevel: 6,
@@ -107,6 +104,7 @@ export class CardImage {
     ctx.rotate(randomAngleFloat);
     ctx.fillText(trumpism, 25, 172);
     ctx.rotate(randomAngleFloat * -1);
+    return this;
   }
 
   private async registerCardFonts() {

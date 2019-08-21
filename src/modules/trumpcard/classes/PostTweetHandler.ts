@@ -1,7 +1,6 @@
 import * as Twit from 'twit';
 import { CardImage } from './CardImage';
 import { TweetDetails } from '../interfaces/tweet-details.interface';
-import * as fs from 'fs';
 import * as config from 'config';
 import { Logger } from '@nestjs/common';
 
@@ -18,7 +17,7 @@ export class PostTweetHandler {
     this.cardImage = cardImage;
   }
 
-  public async postTweet() {
+  public async postTweet(): Promise<void> {
     const cardImageBuffer = await this.cardImage.cardBuffer();
     const b64content = cardImageBuffer.toString('base64');
 
@@ -44,7 +43,7 @@ export class PostTweetHandler {
     });
   }
 
-  private formatTweetStatus() {
+  private formatTweetStatus(): string {
     let tweetStatus = this.tweetDetails.timestamp;
 
     if (this.tweetDetails.mentions.length) {

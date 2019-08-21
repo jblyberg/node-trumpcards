@@ -1,21 +1,21 @@
+import { PNGStream } from 'canvas';
+import * as urlParse from 'url-parse';
 import { Injectable } from '@nestjs/common';
+import { CardImage } from './classes/CardImage';
 import { CreateCardDto } from './dto/create-card.dto';
 import { GetTweetHandler } from './classes/GetTweetHandler';
-import * as urlParse from 'url-parse';
-import { CardImage } from './classes/CardImage';
 import { PostTweetHandler } from './classes/PostTweetHandler';
-import { PNGStream } from 'canvas';
+import { TweetDetails } from './interfaces/tweet-details.interface';
 
 @Injectable()
 export class TrumpcardService {
-  tweetObj: object;
-
-  async tweetCard(createCardDto: CreateCardDto) {
+  async tweetCard(createCardDto: CreateCardDto): Promise<object> {
+    const result = { tweeted: false };
     const tweetDetails = await this.getTweetDetails(createCardDto);
 
     // If it's a re-tweet, we don't make a card.
     if (tweetDetails.is_retweet) {
-      return null;
+      return result;
     }
 
     // Create the card image canvas object
@@ -24,15 +24,18 @@ export class TrumpcardService {
     // Create the outgoing tweet and send it.
     const postTweetHandler = new PostTweetHandler(tweetDetails, cardImage);
     postTweetHandler.postTweet();
+
+    result.tweeted = true;
+    return result;
   }
 
-  async cardStream(createCardDto: CreateCardDto) {
+  async cardStream(createCardDto: CreateCardDto): Promise<PNGStream> {
     const tweetDetails = await this.getTweetDetails(createCardDto);
     const cardImage = new CardImage(tweetDetails);
     return cardImage.cardStream();
   }
 
-  private async getTweetDetails(createCardDto: CreateCardDto) {
+  private async getTweetDetails(createCardDto: CreateCardDto): Promise<TweetDetails> {
     // Parse the tweet ID from the incoming request
     const tweetId: string = urlParse(createCardDto.tweetData.url).pathname.split('/')[3];
 

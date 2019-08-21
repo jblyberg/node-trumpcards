@@ -8,7 +8,7 @@ export class TrumpCardTokenValidationPipe implements PipeTransform {
    *
    * @param value : string
    */
-  transform(createCardDto: CreateCardDto) {
+  transform(createCardDto: CreateCardDto): CreateCardDto {
     const authConfig = config.get('auth');
 
     if (!createCardDto.token) {
