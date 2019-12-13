@@ -18,7 +18,6 @@ export class TrumpcardService {
 
     // Trump has not tweeted, do nothing
     if (tweetDetails === false) {
-      this.logger.verbose('Trump has not tweeted.');
       return;
     }
 

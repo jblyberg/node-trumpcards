@@ -9,3 +9,6 @@ twitter:
   consumer_secret: 'r3xz96mHFZWD31uI5L96Z0ynVR1ugTFbbxf1pnyB5qjuTGM1Rj'
   access_token: '860202990937964544-UNPUChgK2idxn6m6nFKn616WEPcFuWu'
   access_token_secret: 'zFSjzaHTVjhlGgEbIGb5J8UJ1M2oTumKJDjA9mc8Q3vRf'
+
+app:
+  polling_interval: 20
