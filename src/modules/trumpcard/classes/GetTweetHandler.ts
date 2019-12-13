@@ -2,6 +2,7 @@ import * as Twit from 'twit';
 import * as config from 'config';
 import * as emojiStrip from 'emoji-strip';
 import * as moment from 'moment-timezone';
+import * as storage from 'node-persist';
 import { default as cardConfig } from '../../../data/trumpisms.map';
 import { TweetDetails } from '../interfaces/tweet-details.interface';
 
@@ -11,13 +12,54 @@ export class GetTweetHandler {
 
   async fetchTweet(tweetId: string): Promise<TweetDetails> {
     const response = await this.twitter.get('statuses/show/:id', { id: tweetId, tweet_mode: 'extended' });
-    const tweetDetails = await this.parseTweetDetails(response);
+    const tweetDetails = this.parseTweetDetails(response.data);
     return tweetDetails;
   }
 
-  private parseTweetDetails({ data }): TweetDetails {
+  async fetchTimeline(): Promise<false | TweetDetails[]> {
+    // Init temporary storage
+    await storage.init({
+      dir: '/tmp/tweetdata/',
+      stringify: JSON.stringify,
+      parse: JSON.parse,
+    });
+    const lastTweetId = await storage.getItem('last_tweet_id');
+
+    // Fetch the timeline from API
+    const response = await this.twitter.get('statuses/user_timeline', {
+      screen_name: 'RealDonaldTrump',
+      include_rts: false,
+      trim_user: true,
+      since_id: lastTweetId ? lastTweetId : 1,
+      tweet_mode: 'extended',
+    });
+
+    // No tweet data
+    if (typeof response.data[0] === 'undefined') {
+      return false;
+    }
+
+    // New tweet(s)
+    const newestTweetId = response.data[0].id_str;
+    await storage.setItem('last_tweet_id', newestTweetId);
+
+    // If last tweet ID was not found, we will simply return, and pick up from here
+    if (!lastTweetId) {
+      return false;
+    }
+
+    // Parse tweet details and return them
+    const data = response.data.reverse();
+    const tweetDetails = [];
+    for (let tweet of data) {
+      tweetDetails.push(this.parseTweetDetails(tweet));
+    }
+    return tweetDetails;
+  }
+
+  private parseTweetDetails(data): TweetDetails {
     const tweetDetails = {
-      is_retweet: data.retweeted_status ? true : false,
+      id: data.id_str,
       timestamp: this.extractTimestamp(data.created_at),
       text: this.extractText(data.full_text),
       hashtags: this.extractHashtags(data.entities.hashtags),

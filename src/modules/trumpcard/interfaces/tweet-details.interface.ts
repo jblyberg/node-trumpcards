@@ -1,5 +1,4 @@
 export interface TweetDetails {
-  is_retweet: boolean;
   timestamp: string;
   text: string;
   hashtags: any[];

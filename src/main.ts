@@ -8,9 +8,11 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
-  const ip = process.env.IP || serverConfig.ip;
-  const port = process.env.PORT || serverConfig.port;
-  await app.listen(port, ip);
-  logger.log(`Application listening on ${ip ? ip : '*'}:${port}`);
+  if (process.env.NODE_ENV === 'development') {
+    const ip = process.env.IP || serverConfig.ip;
+    const port = process.env.PORT || serverConfig.port;
+    await app.listen(port, ip);
+    logger.log(`Application listening on ${ip ? ip : '*'}:${port}`);
+  }
 }
 bootstrap();

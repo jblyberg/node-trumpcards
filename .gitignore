@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# untracked data
+/data
+
 # Configuration
 /config/development.yml
 /config/production.yml
