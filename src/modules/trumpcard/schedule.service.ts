@@ -9,8 +9,6 @@ export class ScheduleService extends NestSchedule {
 
   constructor(private trumpcardService: TrumpcardService) {
     super();
-    this.trumpcardService.checkTimeline();
-
     this.logger.log('Watching for Trump tweets. 👶🏼');
   }
 
