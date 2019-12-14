@@ -23,7 +23,7 @@ export class TrumpcardService {
 
     // Create cards for any new tweets
     for (let tweet of tweetDetails) {
-      this.tweetCard(tweet);
+      await this.tweetCard(tweet);
     }
 
     return;
