@@ -12,7 +12,9 @@ async function bootstrap() {
     const ip = process.env.IP || serverConfig.ip;
     const port = process.env.PORT || serverConfig.port;
     await app.listen(port, ip);
-    logger.log(`Application listening on ${ip ? ip : '*'}:${port}`);
+    logger.verbose(`Dev Mode: application listening on ${ip ? ip : '*'}:${port}`);
   }
+
+  logger.log('Application is waiting for Trump to tweet.');
 }
 bootstrap();
