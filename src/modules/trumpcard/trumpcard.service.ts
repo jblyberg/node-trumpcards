@@ -36,7 +36,7 @@ export class TrumpcardService {
     // Create the outgoing tweet and send it.
     const postTweetHandler = new PostTweetHandler(tweetDetails, cardImage);
     try {
-      postTweetHandler.postTweet();
+      await postTweetHandler.postTweet();
       this.logger.log('Trump has tweeted: Card created. 💩');
     } catch (error) {
       this.logger.error('Trump has tweeted but was unable to post a card.');

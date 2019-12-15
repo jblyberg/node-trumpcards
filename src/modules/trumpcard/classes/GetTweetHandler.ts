@@ -52,7 +52,9 @@ export class GetTweetHandler {
     const data = response.data.reverse();
     const tweetDetails = [];
     for (let tweet of data) {
-      tweetDetails.push(this.parseTweetDetails(tweet));
+      if (tweet.full_text) {
+        tweetDetails.push(this.parseTweetDetails(tweet));
+      }
     }
     return tweetDetails;
   }

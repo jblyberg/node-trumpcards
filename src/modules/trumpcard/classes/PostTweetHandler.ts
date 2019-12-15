@@ -38,6 +38,8 @@ export class PostTweetHandler {
               this.logger.error('Unable to tweet card.');
             }
           });
+        } else {
+          throw metadataCreateError;
         }
       });
     });
