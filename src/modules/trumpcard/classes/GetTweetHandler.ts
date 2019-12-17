@@ -52,7 +52,7 @@ export class GetTweetHandler {
     const data = response.data.reverse();
     const tweetDetails = [];
     for (let tweet of data) {
-      if (tweet.full_text) {
+      if (this.extractText(tweet.full_text)) {
         tweetDetails.push(this.parseTweetDetails(tweet));
       }
     }
@@ -79,7 +79,7 @@ export class GetTweetHandler {
     tweetText = tweetText.replace(/  /gm, ' ').trim();
     tweetText = this.decodeEntities(tweetText);
 
-    return tweetText;
+    return tweetText.trim();
   }
 
   private extractHashtags(hashTagArr: any[]): string[] {
