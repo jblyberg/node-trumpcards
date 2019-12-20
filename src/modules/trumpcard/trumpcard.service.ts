@@ -22,8 +22,11 @@ export class TrumpcardService {
     }
 
     // Create cards for any new tweets
-    for (let tweet of tweetDetails) {
-      await this.tweetCard(tweet);
+    for (let i = 0; i < tweetDetails.length; i++) {
+      const tweet = tweetDetails[i];
+      setTimeout(() => {
+        this.tweetCard(tweet);
+      }, (i + 1) * 3000);
     }
 
     return;
@@ -37,7 +40,7 @@ export class TrumpcardService {
     const postTweetHandler = new PostTweetHandler(tweetDetails, cardImage);
     try {
       await postTweetHandler.postTweet();
-      this.logger.log('Trump has tweeted: Card created. 💩');
+      this.logger.log(`Trump has tweeted (${tweetDetails.id}): Card created. 💩`);
     } catch (error) {
       this.logger.error('Trump has tweeted but was unable to post a card.');
     }

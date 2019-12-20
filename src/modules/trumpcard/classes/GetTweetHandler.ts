@@ -56,6 +56,7 @@ export class GetTweetHandler {
         tweetDetails.push(this.parseTweetDetails(tweet));
       }
     }
+
     return tweetDetails;
   }
 

@@ -21,16 +21,16 @@ export class PostTweetHandler {
     const cardImageBuffer = await this.cardImage.cardBuffer();
     const b64content = cardImageBuffer.toString('base64');
 
-    await this.twitter.post('media/upload', { media_data: b64content }, async (mediaUploadError, data) => {
+    this.twitter.post('media/upload', { media_data: b64content }, (mediaUploadError, data) => {
       const mediaIdStr = data.media_id_string;
       const altText = this.tweetDetails.text;
       const metaParams = { media_id: mediaIdStr, alt_text: { text: altText } };
 
-      await this.twitter.post('media/metadata/create', metaParams, async metadataCreateError => {
+      this.twitter.post('media/metadata/create', metaParams, metadataCreateError => {
         if (!metadataCreateError) {
           const params = { status: this.formatTweetStatus(), media_ids: [mediaIdStr] };
 
-          await this.twitter.post('statuses/update', params, twitterPostError => {
+          this.twitter.post('statuses/update', params, twitterPostError => {
             if (!twitterPostError) {
               this.logger.verbose('Card tweeted successfully.');
             } else {

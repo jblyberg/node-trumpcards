@@ -1,4 +1,5 @@
 export interface TweetDetails {
+  id: string;
   timestamp: string;
   text: string;
   hashtags: any[];
