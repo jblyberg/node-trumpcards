@@ -28,7 +28,7 @@
     "class-validator": "^0.11.1",
     "config": "^3.3.1",
     "emoji-strip": "^1.0.1",
-    "moment-timezone": "^0.5.28",
+    "moment-timezone": "^0.5.35",
     "nest-schedule": "^0.6.4",
     "node-persist": "^3.0.5",
     "reflect-metadata": "^0.1.13",
